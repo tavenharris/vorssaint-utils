@@ -12,6 +12,7 @@ enum HarnessReaderContractTests {
         codexGolden(suite)
         openCodeGolden(suite)
         copilotGolden(suite)
+        antigravityGolden(suite)
     }
 
     private static func line(_ json: String) -> Data { Data(json.utf8) }
@@ -102,5 +103,16 @@ enum HarnessReaderContractTests {
         let checkpoint = line(#"{"id":"c","timestamp":1790088020,"type":"session.usage_checkpoint","data":{}}"#)
         suite.expect(reader.parse(checkpoint, state: &state, now: now).isEmpty,
                      "a Copilot usage checkpoint parses to nothing")
+    }
+
+    private static func antigravityGolden(_ suite: TestSuite) {
+        let now = Date(timeIntervalSince1970: 0)
+        var state = AgentLogState()
+        let reader = AgentProvider.antigravity.reader
+        let prompt = line(#"{"event":"turnBegan","session_id":"s_ag_1","project":"test","model":"gemini-2.5-pro","timestamp":1790088000}"#)
+        let began = reader.parse(prompt, state: &state, now: now)
+        let expectedDate = Date(timeIntervalSince1970: 1_790_088_000)
+        suite.expect(began.first == .turnBegan(expectedDate),
+                     "an Antigravity prompt opens its turn")
     }
 }
