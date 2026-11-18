@@ -54,6 +54,10 @@
 	<string>14.0</string>
 	<key>LSUIElement</key>
 	<true/>
+	<key>NSSupportsAutomaticTermination</key>
+	<false/>
+	<key>NSSupportsSuddenTermination</key>
+	<false/>
 	<key>NSAppleEventsUsageDescription</key>
 	<string>Vorssaint uses Automation to move files, send items to the Trash, open requested commands and control playback in your media apps.</string>
 	<key>NSAudioCaptureUsageDescription</key>

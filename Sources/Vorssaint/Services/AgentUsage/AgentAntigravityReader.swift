@@ -225,6 +225,9 @@ enum AgentAntigravityReader {
     /// Reads user prompt count (step_type 14) and latest prompt timestamp from the conversation database.
     private static func sessionPromptInfo(for sessionID: String, databasePath: String, fallbackStepCount: Int) -> (prompts: Int, latestPromptDate: Date?) {
         let conversationDbPath = (databasePath as NSString).deletingLastPathComponent + "/conversations/\(sessionID).db"
+        guard FileManager.default.fileExists(atPath: conversationDbPath) else {
+            return (max(1, fallbackStepCount / 30), nil)
+        }
         var db: OpaquePointer?
         guard sqlite3_open_v2(conversationDbPath, &db, SQLITE_OPEN_READONLY | SQLITE_OPEN_NOMUTEX, nil) == SQLITE_OK else {
             return (max(1, fallbackStepCount / 30), nil)
